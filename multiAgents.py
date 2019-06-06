@@ -12,6 +12,11 @@ import random, util
 
 from game import Agent
 
+class RuleAgent(Agent):
+  def getAction(self, gameState):
+    "*** OUR CODE HERE MAGO ***"
+    util.raiseNotDefined()
+
 class ReflexAgent(Agent):
   """
     A reflex agent chooses an action at each choice point by examining
