@@ -55,13 +55,14 @@ def bfs(start, goal, graph):
       if node['point'] == current:
         neighbors = node['neighbors']
 
-    for neighbor in neighbors:
-      if neighbor == goal:
-        return path + [current, neighbor]
-      if neighbor in visited:
-        continue
-      queue.append((neighbor, path + [current]))
-      visited.add(neighbor)   
+    if neighbors != None:
+      for neighbor in neighbors:
+        if neighbor == goal:
+          return path + [current, neighbor]
+        if neighbor in visited:
+          continue
+        queue.append((neighbor, path + [current]))
+        visited.add(neighbor)   
   return None  # no path found. not strictly needed        
 
 def search(begin, end, maze):

@@ -13,6 +13,9 @@ import random
 from util import manhattanDistance
 import util
 import bfs
+import collections
+
+CHOKE_DECISION = {}
 
 class GhostAgent( Agent ):
   def __init__( self, index ):
@@ -72,6 +75,7 @@ class RuleGhost( GhostAgent ):
     return self.__chokeSearch(state, [starting_point], possible_sorroundings)
 
   def getDistribution( self, state ):
+    global CHOKE_DECISION
     # Read variables from state
     ghostState = state.getGhostState( self.index )
     legalActions = state.getLegalActions( self.index )
@@ -80,18 +84,33 @@ class RuleGhost( GhostAgent ):
     choke_points = self.getChockingPoints(state)
     target_point = None
 
-    if len(choke_points) > 1:
-      target_point = choke_points[self.index - 1]
-    else:
-      target_point = state.getPacmanPosition()
-    
+    for index in CHOKE_DECISION.keys():
+      if index != self.index:
+        try:
+          choke_points.remove(CHOKE_DECISION[index])
+        except:
+          pass
+
+    # Select best actions given the state
+    max_distance = 10000
+    for c in choke_points:
+      path = bfs.search(pos, c, state.getWalls())
+      distance = 0
+      if path != None:
+        distance = len(path)
+      if distance < max_distance:
+        max_distance = distance
+        target_point = c
+      else:
+        target_point = state.getPacmanPosition()
+
+    CHOKE_DECISION[self.index] = target_point
+
     speed = 1
     if isScared: speed = 0.5
     
     actionVectors = [Actions.directionToVector( a, speed ) for a in legalActions]
     newPositions = [( int(pos[0]+a[0]), int(pos[1]+a[1]) ) for a in actionVectors]
-
-    # Select best actions given the state
 
     distancesToTarget = [ len(bfs.search(pos, target_point, state.getWalls())) for pos in newPositions]
 
