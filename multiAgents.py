@@ -50,7 +50,7 @@ class ReflexAgent(Agent):
 
     return legalMoves[chosenIndex]
 
-  def evaluationFunction(self, currGameState, pacManAction):
+  def evaluationFunction(self, currentGameState, pacManAction):
     """
     Design a better evaluation function here.
 
@@ -66,16 +66,12 @@ class ReflexAgent(Agent):
     to create a masterful evaluation function.
     """
     # Useful information you can extract from a GameState (pacman.py)
-    nextGameState = currGameState.generatePacmanSuccessor(pacManAction)
-    newPos = nextGameState.getPacmanPosition()
-    oldFood = currGameState.getFood()
-    newGhostStates = nextGameState.getGhostStates()
+    successorGameState = currentGameState.generatePacmanSuccessor(pacManAction)
+    newPos = successorGameState.getPacmanPosition()
+    newFood = successorGameState.getFood()
+    newFoodList = newFood.asList()
+    newGhostStates = successorGameState.getGhostStates()
     newScaredTimes = [ghostState.scaredTimer for ghostState in newGhostStates]
-<<<<<<< Updated upstream
-
-    "*** YOUR CODE HERE ***"
-    return nextGameState.getScore()
-=======
     foodNum = currentGameState.getFood().count()
     if len(newFood.asList()) == foodNum:  # if this action does not eat a food 
         dis = 1000000000
@@ -87,7 +83,6 @@ class ReflexAgent(Agent):
     for ghost in newGhostStates:  # the impact of ghost surges as distance get close
         dis += 4 ** (2 - manhattanDistance(ghost.getPosition(), newPos))
     return -dis
->>>>>>> Stashed changes
 
 def scoreEvaluationFunction(currentGameState):
   """
@@ -197,7 +192,7 @@ class ExpectimaxAgent(MultiAgentSearchAgent):
     Your expectimax agent (question 4)
   """
 
-  def getAction(self, currGameState):
+  def getAction(self, gameState):
     """
       Returns the expectimax action using self.depth and self.evaluationFunction
 
@@ -205,7 +200,50 @@ class ExpectimaxAgent(MultiAgentSearchAgent):
       legal moves.
     """
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    depth = 0
+    return self.getMaxValue(gameState, depth)[1]
+
+  def getMaxValue(self, gameState, depth, agent = 0):
+    actions = gameState.getLegalActions(agent)
+
+    if not actions or gameState.isWin() or depth >= self.depth:
+      return self.evaluationFunction(gameState), Directions.STOP
+
+    successorCost = float('-inf')
+    successorAction = Directions.STOP
+
+    for action in actions:
+      successor = gameState.generateSuccessor(agent, action)
+
+      cost = self.getMinValue(successor, depth, agent + 1)[0]
+
+      if cost > successorCost:
+          successorCost = cost
+          successorAction = action
+
+    return successorCost, successorAction
+
+  def getMinValue(self, gameState, depth, agent):
+    actions = gameState.getLegalActions(agent)
+
+    if not actions or gameState.isLose() or depth >= self.depth:
+      return self.evaluationFunction(gameState), None
+
+    successorCosts = []
+
+    for action in actions:
+      successor = gameState.generateSuccessor(agent, action)
+
+      cost = 0
+
+      if agent == gameState.getNumAgents() - 1:
+        cost = self.getMaxValue(successor, depth + 1)[0]
+      else:
+        cost = self.getMinValue(successor, depth, agent + 1)[0]
+
+      successorCosts.append(cost)
+
+    return sum(successorCosts) / float(len(successorCosts)), None
 
 def betterEvaluationFunction(currGameState):
   """
