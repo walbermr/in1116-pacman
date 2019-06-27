@@ -6,9 +6,9 @@ Resource: http://ai.berkeley.edu/multiagent.html
 
 ### Para o PACMAN: (Sugestão para Artur fazer)
 
-- [ ] Fazer a questão 1 (Agente de Regras)\
+- [x] Fazer a questão 1 (Agente de Regras)\
   Objetivo: Aqui o nosso pacman criado deve ganhar na maioria das vezes pra os fantasmas básicos já fornecidos.
-- [ ] Fazer a questão 2 (Agente Minimax)\
+- [x] Fazer a questão 2 (Agente Minimax)\
   Objetivo: Nessa questão o objetivo é que o nosso fantasma criado ganhe na maioria das vezes desse pacman.
 - [x] Fazer a questão 4 (Agente Expectmax)\
   Objetivo: Nessa questão o objetivo é que o nosso fantasma criado ganhe na maioria das vezes desse pacman.
@@ -16,7 +16,7 @@ Resource: http://ai.berkeley.edu/multiagent.html
 ### Para os FANTASMAS: (Sugestão para Walber fazer)
 
 - [x] Estratégia Multi-Agente para ganhar dos pacmans na questão 2 e 4.
-- Fixar bugs no código dos fantasmas
+- [ ] Fixar bugs no código dos fantasmas
 
 ### Relatório:
 - [ ] Fazer o relatório colaborativamente
