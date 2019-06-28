@@ -33,7 +33,6 @@ def make_graph(maze):
           if testLegal(maze, neighbor):
             node['neighbors'].append(neighbor)
       graph.append(node)
-
   return graph
 
 def bfs(start, goal, graph):
