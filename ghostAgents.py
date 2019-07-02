@@ -115,12 +115,20 @@ class RuleGhost( GhostAgent ):
 
     CHOKE_DECISION[self.index] = target_point
 
+    if target_point == None:
+      target_point = state.getPacmanPosition()
+
     speed = 1
     if isScared: speed = 0.5
     
     actionVectors = [Actions.directionToVector( a, speed ) for a in legalActions]
     newPositions = [( int(pos[0]+a[0]), int(pos[1]+a[1]) ) for a in actionVectors]
-    distancesToTarget = [ len(bfs.search(pos, target_point, state.getWalls())) for pos in newPositions]
+    
+    distancesToTarget = []
+    for pos in newPositions:
+      path = bfs.search(pos, target_point, state.getWalls())
+      if path:
+        distancesToTarget.append(len(path))
 
     if isScared:
       bestScore = max( distancesToTarget )
